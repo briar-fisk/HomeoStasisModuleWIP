@@ -1,0 +1,36 @@
+﻿  Basic_Neural_Network.cpp
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Console.h(284,73): warning C4244: 'argument': conversion from 'float' to 'short', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Console.h(284,59): warning C4244: 'argument': conversion from 'float' to 'short', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Name_Lookup_Tree.h(403,108): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Name_Lookup_Tree.h(404,110): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1505,49): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1506,73): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_1D.h(67,16): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_1D.h(716,33): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(508,54): warning C4244: '=': conversion from '__int64' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(561,75): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(562,101): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(603,78): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(604,78): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(647,110): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(648,75): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(649,101): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(692,110): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(693,75): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(694,101): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(747,1): warning C4244: '+=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(755,84): warning C4244: 'argument': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(788,1): warning C4244: '+=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(835,1): warning C4244: '+=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(908,98): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(325,50): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(365,43): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(406,47): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(797,57): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(832,57): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1013,47): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1034,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1053,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1071,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1090,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+  Basic_Neural_Network.vcxproj -> C:\Present\HomeostasisModule\HomeoNetTest\Debug\Basic_Neural_Network.exe
