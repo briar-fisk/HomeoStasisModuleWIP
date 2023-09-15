@@ -1,7 +1,5 @@
 # Homeostasis Module with Distributed Symbol Networks
 
-![GitHub](https://img.shields.io/github/license/your/repository)
-
 This development repository hosts a homeostasis module designed to mimic biological systems, utilizing the Distributed Symbol Networks neural architecture. Please note that this is a work in progress and intended for sharing with your development team. The complete implementation will follow once the module is thoroughly designed and coded from scratch to ensure it meets the desired quality and functionality standards.
 
 ## Overview
