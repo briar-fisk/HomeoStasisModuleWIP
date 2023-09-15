@@ -129,8 +129,19 @@ public:
 	olc::NT3::c_Table_1D Afferent_Feedback_State_Names;
 	olc::NT3::c_Table_1D Afferent_Feedback_State_Types;
 
+	//These tables are for the target goals, we have the precision goal, and range goal.
+	//We have one set for the high priority variables such as oxygen, and one set which is a range.
+	//The high priority the network will constantly fine tune as the network 'chases' a single target value.
+	//The lower priority, such as for humidity, will not be constantly trying to maintain a single value, but rather keeping the variable within a range. 
+	//Keeping the variable within a range should be more resource efficient as it's not constantly running the controls for it.
+	olc::NT3::c_Table_1D Precision_Goal_Target; //Cell 0 holds the value.
+	olc::NT3::c_Table_1D Range_Goal_Target; //Cell 0 is the low, cell 1 the high.
+	
 	//The Efferent States are the output to the motors and other actuators/output devices.
 	olc::NT3::c_Table_1D Efferent_State;
+
+	//This section will be for defining the settings of the homeostasis module, such as adaptive or fixed.
+	int setting_Adaptive_Or_Fixed; //Adaptive (0) means the network trains on data when it reads in the current state, Fixed (1) means it is 'fixed' to the initial training.
 
 	c_Homeostasis()
 	{
@@ -151,6 +162,8 @@ public:
 
 		MSC.set_Name("MSC");
 		Chrono.set_Name("Chrono");
+
+		setting_Adaptive_Or_Fixed = 0; //Default to adaptive module.
 	}
 
 	//Goal states are associated with an input index on the Afferent Goal State table.
@@ -214,6 +227,19 @@ public:
 	void set_Feedback_State_Type(int p_Index, int p_Type)
 	{
 		Afferent_Feedback_State_Types.set_int(p_Index, 0, p_Type);
+	}
+
+	//Sets the target high for a given goal.
+	void set_Precision_Goal_Target(int p_Index, float p_Target_High)
+	{
+		Precision_Goal_Target.set_float(p_Index, 0, p_Target_High);
+	}
+
+	//Sets the target low for a given goal.
+	void set_Range_Goal_Target(int p_Index, float p_Target_Low, float p_Target_High)
+	{
+		Range_Goal_Target.set_float(p_Index, 0, p_Target_Low);
+		Range_Goal_Target.set_float(p_Index, 1, p_Target_High);
 	}
 
 	void calculate_Delta_Int(int p_Index)
@@ -358,20 +384,8 @@ public:
 		Chrono.ina_A(0, 0, Chrono_Array, Chrono_Depth);
 	}
 
-	void update()
+	void train()
 	{
-
-		//Calculate Delta
-		for (int cou_Raw = 0; cou_Raw < Raw_Goal_Count; cou_Raw++)
-		{
-			calculate_Delta(cou_Raw);
-		}
-
-		//Prep networks for new input set.
-		clear_Nets();
-
-		//Read in Afferent & Delta
-		read_Data_Into_Nets();
 
 		//Build the raw nets on the lowest level.
 		build_Raw_Nets();
@@ -398,7 +412,93 @@ public:
 		Chrono.output_Input_Table_NR();
 		Chrono.output_CAN();
 		Chrono.output_CAN_State();
+	}
 
+	//Takes the current interface input, calculates the delta for the goal-seekers, then reads the data into the NNet Raw
+	void gather_Current_Input()
+	{
+		//Calculate Delta
+		for (int cou_Raw = 0; cou_Raw < Raw_Goal_Count; cou_Raw++)
+		{
+			calculate_Delta(cou_Raw);
+		}
+
+		//Prep networks for new input set.
+		clear_Nets();
+
+		//Read in Afferent & Delta
+		read_Data_Into_Nets();
+	}
+
+	//This is for training the network.
+	void update_Train()
+	{
+		train();
+	}
+
+	void find_Target_Delta()
+	{
+
+	}
+
+	//Gathers the changes needed to bring the system in line with the goal states.
+	void compile_Delta_Targets()
+	{
+		for (int cou_Goal = 0; cou_Goal < Raw_Goal_Count; cou_Goal++)
+		{
+			find_Target_Delta();
+		}
+	}
+
+	//This generates predictions and selects the traces putting them into the output array.
+	void update_Predict()
+	{
+		//Determine which goals states are out of bounds and need corrected based upon the target values and current states
+		compile_Delta_Targets();
+
+		//The delta changes needed for each goal are calculated, those that are within ranges are entered as (1). 
+
+		//Enter the delta changes desired into the raw networks, enter the current states as well
+
+		//Charge the raw constructs
+
+		//Gather the Raw treetop nodes & their charges
+
+		//Charge the Multi-Sensory-Construct (MSC) with these nodes & their charges
+
+		//Gather the MSC treetops
+
+		//Charge (Right leg only) the Chronological-Construct (Chrono) with the MSC treetops & charges
+
+		//Gather the resultant MSC treetops
+
+		//Gather the state quanta patterns represented by these MSC treetops
+
+		//Find those that have the most optimal delta changes in relation to the goal deltas desired, weigh them by reinforcement counter (RC)
+
+		//From these do a weighted selection of the Feedback_States to determine the Efferent output to the systems actuators
+	}
+
+	//Update behavior is determined by p_How, 0: Train, 1: Predict, though predict can train as well if the setting is on.
+	void update(int p_How = 0)
+	{
+		//The current input & deltas are gathered regardless.
+		gather_Current_Input();
+
+		if (p_How == 0)
+		{
+			update_Train();
+		}
+
+		if (p_How == 1)
+		{
+			if (setting_Adaptive_Or_Fixed == 0)
+			{
+				update_Train();
+			}
+
+			update_Predict();
+		}
 	}
 
 	void output()
@@ -465,6 +565,10 @@ int main()
 	//The first argument is the index, corresponds to the goal state index.
 	testerman.set_Goal_State_Type(0, 1);
 	testerman.set_Goal_State_Type(1, 1);
+
+	//Set the ranges of target values for the goal network to seek.
+	testerman.set_Precision_Goal_Target(0, 5.0); //The O2 is considered a 'priority' variable needed increased precision and maintanance.
+	testerman.set_Range_Goal_Target(1, 7.0, 9.0); //The temperature is considered a lower priority and we don't want the heater kicking on and off constantly if the temp is somewhat stable around the goal value.
 
 	//Register and name the two feedback states for the current dataset.
 	testerman.register_Feedback_States(2);

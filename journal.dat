@@ -1,0 +1,18 @@
+
+Fri 09/15/2023  2:38:55.40:
+   Decided to do two tables for goal seeking parameters. One for single value goals and one with a range. This is so you can separate things that need fine tuning all the time from those who can be a little more lax.
+
+Fri 09/15/2023  2:39:02.80:
+   Implemented those tables.
+
+Fri 09/15/2023  2:39:38.84:
+   Adding settings, starting with adaptive vs fixed. Adaptive meaning it trains as it runs, and fixed means it is locked into the initial training set.
+
+Fri 09/15/2023  3:46:42.62:
+   Updated the update function to handle training vs prediction, and the setting_Adaptive_Or_Fixed
+
+Fri 09/15/2023  3:47:31.31:
+   Skeleton of the update_Prediction is outlined, working on implementing compile_Delta_Targets. Have to pack up for now so uploading progress.
+
+Fri 09/15/2023  3:49:14.73:
+   Oh yeah, added journal.bat so I can use it to keep track of these comments
