@@ -241,6 +241,7 @@ public:
      
      virtual void set_State(u_Data_3 p_State)=0; //Sets the state if the node is a state node, otherwise it does nothing.
      virtual long long int get_State()=0; //Returns the state if it is a state node otherwise it does nothing.
+     virtual double get_State_F()=0; //Returns the state if it is a state node otherwise it does nothing.
      
      virtual int get_Type()=0; //Returns the type of node, 0 == State node, 1 == Normal Node, 2 == Treetop state node, 3 == Treetop node.
      virtual void set_Type(int p_Type)=0; //Sets the type of node.
@@ -513,6 +514,7 @@ public:
      
      //Returns the state if it is a state node otherwise it does nothing.
      long long int get_State(){ return 0; }
+     double get_State_F(){ return 0.0f; }
      
      //Returns the type of node, 0 == State node, 1 == Normal Node, 2 == Treetop state node, 3 == Treetop node.
      int get_Type(){ return Type; }
@@ -977,6 +979,7 @@ public:
      
      //Returns the state if it is a state node otherwise it does nothing.
      long long int get_State(){ return State.I; }
+     double get_State_F(){ return State.F; }
      
      //Returns the type of node, 0 == State node, 1 == Normal Node, 2 == Treetop state node, 3 == Treetop node.
      int get_Type(){ return Type; }

@@ -1339,11 +1339,35 @@ public:
                system("PAUSE > NULL");
           }
      }
+
+     //Used in the discharging to gather trace patterns.
+     void discharge_Given_Treetop(int p_Row, int p_Cell, u_Data_3 p_NID, int64_t p_Charge)
+     {
+         c_NT3_Base_Node_1D* tmp_NID = Nodes.get_Treetop_Ref(p_NID);
+
+         //void discharge_Treetop_By_NID_Into_Given_Tables_L(int p_Position, u_Data_3 p_NID, u_Data_3 p_Charge, int p_Current_Input, c_Raw_Table_1D * p_PTbl, c_Raw_Table_1D * p_PosTbl, c_Raw_Table_1D * p_CTbl, c_Raw_Table_1D * p_RCTbl, c_Raw_Table_1D * p_TtTbl)
+         
+         //std::cout << "\n tmp_NID: " << tmp_NID;
+
+        Nodes.bp_Given_Cell(&tbl_Pattern_Output_C, p_Row, p_Cell, tmp_NID);
+
+        //tbl_Position_Output_C.add_Int(Current_Input, 0);
+        //tbl_Charge_Output_C.add_Int(Current_Input, p_Charge);
+        //tbl_RC_Output_C.add_Float(Current_Input, tmp_LL->NID->get_RC_Score());
+        //tbl_Treetops_Output_C.add_Int(Current_Input, p_NID.U);
+     }
      
      void* get_Current_Treetop()
      {
-         if (CAN.Number_Of_Tiers == 1) { return CAN.CAN[0][0]; }
-         return CAN.Treetop;
+         
+         if (CAN.Number_Of_Tiers == 1) { return CAN.CAN[0][0]->NID.NR; }
+         return CAN.Treetop->NID.NR;
+     }
+     
+     uint64_t get_Current_Treetop_I()
+     {
+         if (CAN.Number_Of_Tiers == 1) { return CAN.CAN[0][0]->NID.U; }
+         return CAN.Treetop->NID.U;
      }
 
      ////==---------------------+
@@ -1433,6 +1457,14 @@ public:
           std::cout << "\n\n ---===+===---";
           std::cout << "\n " << Name << " Inputs Tables ->" << this;
           tbl_Input.output_F(1);
+          
+          std::cout << "\n --===+===--\n";
+     }
+     void output_Input_Table_U()
+     {
+          std::cout << "\n\n ---===+===---";
+          std::cout << "\n " << Name << " Inputs Tables ->" << this;
+          tbl_Input.output_U(1);
           
           std::cout << "\n --===+===--\n";
      }
@@ -1543,12 +1575,31 @@ public:
           tbl_Treetops.output_I(2);
           std::cout << "\n\t ---===+===---\n";
      }
-     
+
+     //Outputs the tables of the construct with the patterns as mixed.
+     void output_Output_Tables_M()
+     {
+         tbl_Pattern_Output_C.output_F(2);
+         tbl_Charge_Output_C.output_I(2);
+         tbl_RC_Output_C.output_F(2);
+         tbl_Treetops_Output_C.output_NR(2);
+     }
+
+     //Outputs the tables of the construct with the patterns as mixed.
+     void output_Output_Tables_MSC()
+     {
+         tbl_Pattern_Output_C.output_U(2);
+         tbl_Charge_Output_C.output_I(2);
+         tbl_RC_Output_C.output_F(2);
+         tbl_Treetops_Output_C.output_NR(2);
+     }
+
      //Outputs the tables of the construct with the patterns as int.
      void output_Output_Tables_F()
      {
           std::cout << "\n\n\t ---===+===---";
-          std::cout << "\n\t " << Name << " Output_Tables_I ->" << this;
+          std::cout << "\n\t " << Name << " Output_Tables_F ->" << this;
+          /*
           tbl_Pattern_Output_L.output_F(2);
           tbl_Charge_Output_L.output_F(2);
           tbl_Position_Output_L.output_F(2);
@@ -1563,11 +1614,11 @@ public:
           tbl_RC_Output_R.output_F(2);
           tbl_Treetops_Output_R.output_F(2);
           tbl_Depths_R.output_F(2);
-     
+     */
           
           tbl_Pattern_Output_C.output_F(2);
           tbl_Charge_Output_C.output_F(2);
-          tbl_Position_Output_C.output_F(2);
+          //tbl_Position_Output_C.output_F(2);
           tbl_RC_Output_C.output_F(2);
           tbl_Treetops_Output_C.output_F(2);
           
@@ -1581,10 +1632,17 @@ public:
           CAN.output_CAN();
      }
           
-     //Outputs the CAN state.
-     void output_CAN_State()
+     //Outputs the CANs.
+     void output_CAN_Col(int p_X, int p_Y, int p_Type = 0)
      {
-          CAN.output_CAN_State();
+          CAN.output_CAN_Col(p_X, p_Y, p_Type);
+     }
+          
+     //Outputs the CAN state.
+     //p_Type: 0: string, 1: other
+     void output_CAN_State(int p_Type = 0)
+     {
+          CAN.output_CAN_State(p_Type);
      }
           
      //Outputs the CAN state.
@@ -1745,6 +1803,12 @@ public:
      void ina(int p_Row, int p_Cell, void * p_Submission)
      {
           tbl_Input.add_Data_NR(p_Row, p_Cell, p_Submission);
+     }
+     
+     //Accepts an input to the inputs and this is a very unhelpful comment.
+     void ina(int p_Row, int p_Cell, uint64_t p_Submission)
+     {
+          tbl_Input.add_Data_U(p_Row, p_Cell, p_Submission);
      }
      
      

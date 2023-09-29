@@ -40,6 +40,10 @@ namespace olc
         #include "c_Raw_Table_1D.h"
 
 
+
+        #include "LoTd/c_Math.h"
+        #include "LoTd/Console_Graphics/Shipyard/Shipyard.h"
+
         //The init routines for libraries contained within such as console.
             void init_LoTd()
             {

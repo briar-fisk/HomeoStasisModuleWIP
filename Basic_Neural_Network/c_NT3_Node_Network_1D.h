@@ -332,6 +332,18 @@ public:
           return tmp_Node;
      }
      
+     //Gets the node ref for a given treetop NID.
+     c_NT3_Base_Node_1D* get_Treetop_Ref(u_Data_3 p_NID)
+     {
+         //Search for the node in the treetop tree.
+         Treetops_Tree.search(p_NID);
+
+         if (Treetops_Tree.flg_Foundit)
+         {
+             return Treetops_Tree.get_Current_Node_NID();
+         }
+         return NULL;
+     }
      
      ////==----------------------------+
      //==--   BACKPROPAGATION STATION
@@ -342,9 +354,9 @@ public:
      {
           //For when directly output the dendrites of a nodes on the base tier.
           if (p_Node == NULL){ return; }
-          ochr(0, 12, '<');
+          //ochr(0, 12, '<');
           bp_Output_Only_L(p_Node, p_Type);
-          ochr(0, 12, '>');
+          //ochr(0, 12, '>');
      }
      
      //bp_Output the left node.
@@ -368,11 +380,17 @@ public:
                     if (tmp_State == char (9)){ tmp_State = '9'; }
                     if (tmp_State == char (10)){ tmp_State = 'a'; }
                     if (tmp_State == char (13)){ tmp_State = 'd'; }
-                    std::cout << tmp_State;
+                    //std::cout << tmp_State;
+                    ochr(0, (int(tmp_State) + 1.0), tmp_State);
                }
                if (p_Type == 1)
                {
                     std::cout << p_Node->get_State() << " ";
+               }
+               if (p_Type == 2)
+               {
+                    //std::cout << p_Node->get_State_F() << " ";
+                    oflt(0, (p_Node->get_State_F() + 1.0), (p_Node->get_State_F()));
                }
           }
      }
@@ -397,11 +415,17 @@ public:
                     if (tmp_State == char (9)){ tmp_State = '9'; }
                     if (tmp_State == char (10)){ tmp_State = 'a'; }
                     if (tmp_State == char (13)){ tmp_State = 'd'; }
-                    std::cout << tmp_State;
+                    //std::cout << tmp_State;
+                    ochr(0, (int(tmp_State) + 1.0), tmp_State);
                }
                if (p_Type == 1)
                {
                     std::cout << p_Node->get_State();
+               }
+               if (p_Type == 2)
+               {
+                   //std::cout << p_Node->get_State_F() << " ";
+                   oflt(0, (p_Node->get_State_F() + 1.0), (p_Node->get_State_F()));
                }
           }
      }
@@ -453,7 +477,45 @@ public:
           }
      }
      
-     
+
+     //Starts the Backprop procedures for output only.
+     void bp_Given_Cell(c_Raw_Table_1D* p_Pattern_Output, int p_Row, int p_Cell, c_NT3_Base_Node_1D* p_Node)
+     {
+         //For when directly output the dendrites of a nodes on the base tier.
+         if (p_Node == NULL) { return; }
+
+         bp_Given_Cell_L(p_Pattern_Output, p_Row, p_Cell, p_Node);
+     }
+
+     //bp_Output the left node.
+     void bp_Given_Cell_L(c_Raw_Table_1D* p_Pattern_Output, int p_Row, int p_Cell, c_NT3_Base_Node_1D* p_Node)
+     {
+         //If a left leg exists then initiate a backpropagation along it, then along the right side.
+         if (p_Node->Dendrite_L != NULL)
+         {
+             bp_Given_Cell_L(p_Pattern_Output, p_Row, p_Cell, p_Node->Dendrite_L);
+             bp_Given_Cell_R(p_Pattern_Output, p_Row, p_Cell, p_Node->Dendrite_R);
+         }
+         else
+         {
+             p_Pattern_Output->add_Data_Int(p_Row, p_Cell, p_Node->get_State());
+         }
+     }
+
+     //bp_Output the right node.
+     void bp_Given_Cell_R(c_Raw_Table_1D* p_Pattern_Output, int p_Row, int p_Cell, c_NT3_Base_Node_1D* p_Node)
+     {
+         //If a right leg exists then initiate a backpropagation.
+         if (p_Node->Dendrite_R != NULL)
+         {
+             bp_Given_Cell_R(p_Pattern_Output, p_Row, p_Cell, p_Node->Dendrite_R);
+         }
+         else
+         {
+             p_Pattern_Output->add_Data_Int(p_Row, p_Cell, p_Node->get_State());
+         }
+     }
+
      //Backpropagates a given Treetop. Returns the treetops address.
      c_NT3_Base_Node_1D * bp_Treetop(c_Raw_Table_1D * p_Pattern_Output,int p_Flat_Output, int p_Input, u_Data_3 p_NID)
      {

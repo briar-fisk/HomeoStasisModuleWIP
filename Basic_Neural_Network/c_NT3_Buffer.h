@@ -110,7 +110,7 @@ public:
                tmp_LL = tmp_LL_Next;
           }
           
-          delete Root;
+          if (Root != NULL) { delete Root; }
           Root = NULL;
           Current_LL = &Root;
           
@@ -881,8 +881,9 @@ public:
      long long int gather_Treetops()
      {
           c_NT3_Linked_List * tmp_LL = Treetops.Root;
-          c_NT3_Linked_List * tmp_LL_Root = Treetops.Root;
-          
+          c_NT3_Linked_List_Handler tmp_Treetops_LLH;;
+          tmp_Treetops_LLH.Root = Treetops.Root;
+
           long long int tmp_Current_Highest_Charge = 0;
           
           long long int tmp_Charge = 0;
@@ -897,9 +898,9 @@ public:
                tmp_LL = tmp_LL->Next;    
           }
           
-          tmp_LL = Treetops.Root;
           Treetops.Root = NULL;
           Treetops.reset();
+          tmp_LL = tmp_Treetops_LLH.Root;
           
           while(tmp_LL != NULL)
           {
@@ -913,8 +914,8 @@ public:
                
                tmp_LL = tmp_LL->Next;
           }
-          
-          delete tmp_LL_Root;
+
+          tmp_Treetops_LLH.reset();
           
           return tmp_Current_Highest_Charge;
      }

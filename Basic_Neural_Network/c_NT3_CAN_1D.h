@@ -305,7 +305,7 @@ public:
      }
           
      //Outputs the CAN.
-     void output_CAN_State()
+     void output_CAN_State(int p_Type)
      {
           std::cout << "\n\n";
           for (int cou_T=0;cou_T<Number_Of_Tiers;cou_T++)
@@ -314,8 +314,25 @@ public:
                for (int cou_Index=0;cou_Index<(Number_Of_Tiers - cou_T);cou_Index++)
                {
                     std::cout << " {";
-                    Nodes->bp_Output_Only(CAN[cou_T] [cou_Index]);
+                    Nodes->bp_Output_Only(CAN[cou_T] [cou_Index], p_Type);
                     std::cout << "}";
+               }
+          }
+     }
+          
+     //Outputs the CAN.
+     void output_CAN_Col(int p_X, int p_Y, int p_Type)
+     {
+          xy(p_X, p_Y);
+          for (int cou_T=0;cou_T<Number_Of_Tiers;cou_T++)
+          {
+               xy(p_X, (p_Y)+cou_T);
+               //std::cout << "\n" << cou_T << "->";
+               for (int cou_Index=0;cou_Index<(Number_Of_Tiers - cou_T);cou_Index++)
+               {
+                    //Nodes->bp_Output_Only(CAN[cou_T] [cou_Index], p_Type); 
+
+                    ochr(0, (int(CAN[cou_T][cou_Index]) + 1.0), char(CAN[cou_T][cou_Index]));
                }
           }
      }

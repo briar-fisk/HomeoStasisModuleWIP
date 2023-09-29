@@ -106,21 +106,3 @@ Tue 09/26/2023 13:25:40.75:
 
 Tue 09/26/2023 17:13:39.83:
    Moved the output for the otables during backpropagation to output_BPOTables()
-
-Tue 09/26/2023 21:15:58.96:
-   Implemented basic trace matching, checks each retrieved trace set for the match tot he goal deltas and scores in on a [match] / [chrono_depth * goal_count]
-
-Tue 09/26/2023 23:34:29.56:
-   Elaborated on the trace selection quite a bit. Going to jot down some ideas and then create the basic prediction with output graphs. After that move onto implementing different trace selection strategies and adding things like trace charge to the output.
-
-Wed 09/27/2023  1:07:48.53:
-   Fixed the old memory leak in c_NT3_Buffer gather_Treetops() where I forgot to delete the Treetops array properly, instead handing the root to a tmp, NULLing the root of treetops decoupling the list from the treetops handler, resetting treetops doing nothing, and then deleting the one root node leaving the rest of the list dangling.
-
-Wed 09/27/2023  1:10:56.93:
-   Memory stable at 7-8 MB, IIRC that was the only leak, really need to stop using the old version of the engine that predates the patch.
-
-Wed 09/27/2023  1:52:40.56:
-   Added CAN output so we can see the current CAN as coloful characters.
-
-Wed 09/27/2023 12:47:01.10:
-   Added the c_Shipyard_Line_Graph from an old project to use for line graph output of the current state of the simulation the homeostasis module is controlling instead of watching twitching tables
