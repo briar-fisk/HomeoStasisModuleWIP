@@ -46,7 +46,7 @@ public:
 	// O2 Pump | +4/Iteration [O2]          | -1/Iteration [Temperature] | if (O2 < 5) (Heater = 1) else (Heater = 0)
 	// Heater  | +3/Iteration [Temperature] |                            | if (Temp < 8) (Heater = 1) else (Heater = 0)
 
-	int iterate()
+	int iterate(int p_O2_Pump = -1, int p_Heater = -1)
 	{
 		Iteration++;
 
@@ -70,12 +70,20 @@ public:
 		if (Temp == tmp_Temp) { Temp_Delta = 1; }
 		if (Temp > tmp_Temp) { Temp_Delta = 2; }
 
-		//Calculate the actuator state.
-		if (tmp_Temp < 8) { Heater = 1; }
-		if (tmp_O2 < 5) { O2_Pump = 1; }
+		if ((p_Heater != -1) && (p_O2_Pump != -1))
+		{
+			Heater = p_Heater;
+			O2_Pump = p_O2_Pump;
+		}
+		else
+		{
+			//Calculate the actuator state.
+			if (tmp_Temp < 8) { Heater = 1; }
+			if (tmp_O2 < 5) { O2_Pump = 1; }
 
-		if (tmp_Temp >= 8) { Heater = 0; }
-		if (tmp_O2 >= 5) { O2_Pump = 0; }
+			if (tmp_Temp >= 8) { Heater = 0; }
+			if (tmp_O2 >= 5) { O2_Pump = 0; }
+		}
 
 		return Iteration;
 	}
@@ -94,7 +102,24 @@ public:
 		std::cout << " - Heater____: "; olc::NT3::oint(0, (Heater + 1), Heater);
 	}
 
+	void output_F(std::string p_FName)
+	{
+		std::ofstream tmp_F;
 
+		tmp_F.open(p_FName, std::ios::app);
+		tmp_F << "\n" << Iteration;
+
+		tmp_F << " - O2________: " << O2;
+		tmp_F << " - O2_Delta__: " << O2_Delta;
+
+		tmp_F << " - Temp______: " << Temp;
+		tmp_F << " - Temp_Delta: " << Temp_Delta;
+
+		tmp_F << " - O2_Pump___: " << O2_Pump;
+		tmp_F << " - Heater____: " << Heater;
+
+		tmp_F.close();
+	}
 };
 
 
@@ -113,7 +138,75 @@ void output_Line_Graph(int p_X, int p_Y, int p_Depth, int p_Height)
 }
 
 
+//This class handles data granulation
+class c_Granulator
+{
+public:
 
+	float * Top;
+	float * Bottom;
+	int Count;
+
+	c_Granulator()
+	{
+		Top = NULL;
+		Bottom = NULL;
+		Count = 0;
+	}
+
+	void add_Var(float p_Bottom, float p_Top)
+	{
+		float* tmp_Top;
+		float* tmp_Bottom;
+
+		tmp_Top = new float[Count + 1];
+		tmp_Bottom = new float[Count + 1];
+
+		for (int cou_Index = 0; cou_Index < Count; cou_Index++)
+		{
+			tmp_Top[cou_Index] = Top[cou_Index];
+			tmp_Bottom[cou_Index] = Bottom[cou_Index];
+		}
+
+		if (Top != NULL)
+		{
+			delete[] Top;
+			delete[] Bottom;
+		}
+
+		Top = new float[Count + 1];
+		Bottom = new float[Count + 1];
+
+		for (int cou_Index = 0; cou_Index < Count; cou_Index++)
+		{
+			Top[cou_Index] = tmp_Top[cou_Index];
+			Bottom[cou_Index] = tmp_Bottom[cou_Index];
+		}
+
+		Top[Count] = p_Top;
+		Bottom[Count] = p_Bottom;
+
+		delete [] tmp_Top;
+		delete [] tmp_Bottom;
+
+		Count++;
+	}
+
+	float get_Value(int p_Var, float p_Value)
+	{
+		//Range goals
+		float tmp_Value = 0;
+
+		if (p_Value < Bottom[p_Var]) { tmp_Value = 0.0; }
+		if ((p_Value >= Bottom[p_Var]) && (p_Value <= Top[p_Var])) { tmp_Value = 1.0; }
+		if (p_Value > Top[p_Var]) { tmp_Value = 2.0; }
+
+		//std::cout << "\n Goal_Index: " << p_Goal;
+		//std::cout << " State: >" << tmp_State << "< tmp_Target_Goal_State: >" << tmp_Target_Goal_State_Low << "< >" << tmp_Target_Goal_State_High << "< Delta: >" << tmp_Delta << "<";
+
+		return tmp_Value;
+	}
+};
 
 
 //06 31:25 Space Arcologies
@@ -194,6 +287,16 @@ public:
 
 		MSC.settings_Action_Potential_Threshold = 0.0f; //Allow all charges to pass through the MSC
 		Chrono.settings_Action_Potential_Threshold = 0.0f; //Allow all charges to pass through the Chrono
+	}
+
+	void reset()
+	{
+		reset_All_IO();
+
+		for (int cou_Chrono = 0; cou_Chrono < Chrono_Depth; cou_Chrono++)
+		{
+			Chrono_Array[cou_Chrono] = NULL;
+		}
 	}
 
 	//Goal states are associated with an input index on the Afferent Goal State table.
@@ -392,7 +495,11 @@ public:
 
 		//Reset input, read in the current Chrono, and Build
 		read_Chrono_Array_Into_Chrono();
-		Chrono.Build_RC(1);
+
+		if (Chrono_Array[0] != NULL)
+		{
+			Chrono.Build_RC(1);
+		}
 
 		//std::cout << "\n\n CHRONO: ";
 
@@ -412,7 +519,7 @@ public:
 		}
 		MSC.output_CAN_Col((((Raw_Goal_Count * 6) + (Raw_Feedback_Count * 6) + 5) + 5), 4);
 		Chrono.output_CAN_Col((((Raw_Goal_Count * 6) + (Raw_Feedback_Count * 6) + 5) + (Raw_Goal_Count * 2) + (Raw_Feedback_Count) + 15), 4);
-
+		
 		olc::NT3::xy(0, ((Raw_Goal_Count * 2) + (Raw_Feedback_Count)) + 2);
 
 	}
@@ -533,6 +640,15 @@ public:
 		//Chrono.output_Output_Tables_MSC();
 	}
 
+	//Charges the chrono on the right leg only causing it to seek those that are previous input traces based on the current input set.
+	void charge_Chrono_Seek_Future()
+	{
+		Chrono.setting_Charge_L = 1;//When charging Chrono charges backwards.
+		Chrono.setting_Charge_R = 0;
+		Chrono.Eval();
+		//Chrono.output_Output_Tables_MSC();
+	}
+
 	// Efferent_Prediction_Traces
 	// Loop through each Chrono
 	// For each Chrono take the states and read them separately through the MSC
@@ -637,7 +753,7 @@ public:
 			float flg_Bad_Trace = 0;
 
 			//By starting the cou_Cell on 1 instead of 0 we skip the first chrono input as we don't know the previous states, the states of the chrono will effect 1, but 0 is undefined.
-			for (int cou_Cell = 1; cou_Cell < MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth; cou_Cell++)
+			for (int cou_Cell = (MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth - 1); cou_Cell < (MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth); cou_Cell++)
 			{
 				//For each cell check the two goals against the deltas returned to see if they match.
 				for (int cou_Goal = 0; cou_Goal < Raw_Goal_Count; cou_Goal++)
@@ -672,7 +788,7 @@ public:
 				std::cout << " Trace: ";
 
 
-				for (int cou_Cell = 0; cou_Cell < MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth; cou_Cell++)
+				for (int cou_Cell = 0; cou_Cell < (MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth); cou_Cell++)
 				{
 					olc::NT3::ostr(0, 13, " [{<- ");
 					olc::NT3::ostr(0, 14, " G[ ");
@@ -719,7 +835,7 @@ public:
 					float tmp_Avg_Total = 0.0;
 					float tmp_Count = 0.0;
 
-					for (int cou_Cell = 0; cou_Cell < MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth; cou_Cell++)
+					for (int cou_Cell = 0; cou_Cell < (MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth - 1); cou_Cell++)
 					{
 						tmp_Avg_Total += Efferent_Prediction_Traces.get_F(cou_Row, cou_Cell, ((cou_Feedback) + (Raw_Goal_Count * 2)));
 						tmp_Count++;
@@ -729,12 +845,15 @@ public:
 
 					Efferent_Prediction_Traces.add_Data_Float(cou_Row, (MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth + 5), tmp_Avg);
 				}
+
 			}
 		}
 
+		olc::NT3::xy(0, 15);
 		Efferent_Prediction_Traces.output_F();
 
 		//Output the goals.
+		olc::NT3::xy(0, 25);
 		olc::NT3::ostr(0, 13, "\n\n Goals: ");
 		for (int cou_Goal = 0; cou_Goal < Raw_Goal_Count; cou_Goal++)
 		{
@@ -742,6 +861,49 @@ public:
 			olc::NT3::ostr(0, 7, Afferent_Goal_State_Names.get_string(cou_Goal, 0));
 			std::cout << " " << Goal_Target_Deltas.get_float(cou_Goal, 0);
 		}
+	}
+
+	void gather_Efferent_Prediction()
+	{
+		float * tmp_Feedback;
+		tmp_Feedback = new float[Raw_Feedback_Count];
+		float tmp_Count = 0.0;
+		//system("CLS");
+
+		for (int cou_F = 0; cou_F < Raw_Feedback_Count; cou_F++)
+		{
+			tmp_Feedback[cou_F] = 0.0f;
+		}
+
+		for (int cou_Row = 0; cou_Row < Efferent_Prediction_Traces.Number_Of_Rows; cou_Row++)
+		{
+			if (Efferent_Prediction_Traces.Rows[cou_Row]->Depth > 0)
+			{
+				for (int cou_F = 0; cou_F < Raw_Feedback_Count; cou_F++)
+				{
+					//std::cout << "\n Output: " << Efferent_Prediction_Traces.Rows[cou_Row]->Cells[(MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth + 5)]->Data[cou_F].F << "                   ";
+					tmp_Feedback[cou_F] += Efferent_Prediction_Traces.Rows[cou_Row]->Cells[(MSC.tbl_Pattern_Output_C.Rows[cou_Row]->Depth + 5)]->Data[cou_F].F;
+				}
+				tmp_Count++;
+			}
+		}
+
+		//std::cout << "\n tmp_Count: " << tmp_Count;
+		for (int cou_F = 0; cou_F < Raw_Feedback_Count; cou_F++)
+		{
+			//if (tmp_Count == 0) { tmp_Feedback[cou_F] = (rand() % 2); tmp_Count = 1; }
+			if (tmp_Count == 0) { olc::NT3::ostr(0, 12, " NO TRACES FOUND  "); tmp_Feedback[cou_F] = 0; tmp_Count = 1; }
+			//std::cout << "\n Feedback[" << cou_F << "]: " << tmp_Feedback[cou_F] << " Avg: " << tmp_Feedback[cou_F] / tmp_Count << " ";
+			tmp_Feedback[cou_F] = tmp_Feedback[cou_F] / tmp_Count;
+			if (tmp_Feedback[cou_F] >= 0.4) { tmp_Feedback[cou_F] = 1.0; }
+			if (tmp_Feedback[cou_F] < 0.4) { tmp_Feedback[cou_F] = 0.0; }
+			//std::cout << " >>> " << tmp_Feedback[cou_F] << "            ";
+			Efferent_Prediction.set_Float(cou_F, 0, tmp_Feedback[cou_F]);
+		}
+
+		delete [] tmp_Feedback;
+		tmp_Feedback = NULL;
+		//system("PAUSE > NULL");
 	}
 
 	//Go through the returned traces and select the appropriate ones.
@@ -794,6 +956,9 @@ public:
 	//Discharges one treetop and collect the output.
 	void discharge_MSC_Treetop(int p_Row, int p_Cell, uint64_t p_NID, uint64_t p_Charge)
 	{
+		//Need to setup the tables so the trace scrapers don't get upset and crash.
+		if (p_NID == 0) { return; }
+
 		olc::NT3::u_Data_3 tmp_Node;
 		tmp_Node.U = p_NID;
 
@@ -896,6 +1061,9 @@ public:
 		sort_Traces();
 
 		//From these do a weighted selection of the Feedback_States to determine the Efferent output to the systems actuators
+		gather_Efferent_Prediction();
+
+		Efferent_Prediction.output_F();
 	}
 
 	//Update behavior is determined by p_How, 0: Train, 1: Predict, though predict can train as well if the setting is on.
@@ -961,10 +1129,51 @@ public:
 	}
 };
 
+void Simboi_Training(c_Homeostasis * p_Homeostasis, c_Sim * p_Simboi, c_Granulator * p_Granman)
+{
+	p_Homeostasis->reset();
+
+	for (int cou_Index = 0; cou_Index < 100; cou_Index++)
+	{
+		//These read the data into the afferent interface. The deltas for the goal states are calculated internally. The Feedback is read into the trace so that it can be retrieved later.
+
+		//O2, Simboi is just a test simulation to generate data for this development, the actual data from the systems will be read in instead.
+		p_Homeostasis->Afferent_Goal_State.set_float(0, 0, p_Granman->get_Value(0, p_Simboi->O2));
+
+		//Temperature
+		p_Homeostasis->Afferent_Goal_State.set_float(1, 0, p_Granman->get_Value(1, p_Simboi->Temp));
+
+		//O2_Pump
+		p_Homeostasis->Afferent_Feedback_State.set_float(0, 0, float(p_Simboi->O2_Pump));
+
+		//Heater
+		p_Homeostasis->Afferent_Feedback_State.set_float(1, 0, float(p_Simboi->Heater));
+
+		p_Homeostasis->update();
+
+		//Simboi.output();
+
+		p_Simboi->iterate();
+		p_Simboi->output_F("Testboi.txt");
+
+		//std::cout << "\n\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+		//system("PAUSE");
+	}
+}
 
 int main()
 {
+
 	olc::NT3::init_LoTd();
+
+	system("PAUSE > NULL");
+
+	std::ofstream tmp_F;
+	tmp_F.open("Testboi.txt", std::ios::trunc);
+	tmp_F.close();
+
+	c_Granulator Granman;
+
 
 	//Declare the homeostasis module
 	c_Homeostasis testerman;
@@ -977,77 +1186,193 @@ int main()
 	testerman.rename_Goal_State(1, "Temperature");
 
 	//Set the ranges of target values for the goal network to seek.
-	testerman.set_Range_Goal_Target(0, 4.9, 5.1); //The O2 is considered a 'priority' variable needed increased precision and maintanance.
-	testerman.set_Specific_Goal_Target(0, 5.0); //Set the value for the specific goal we want, used to search the network for optimal solutions.
-	testerman.set_Range_Goal_Target(1, 7.0, 9.0); //The temperature is considered a lower priority and we don't want the heater kicking on and off constantly if the temp is somewhat stable around the goal value.
-	testerman.set_Specific_Goal_Target(1, 8.0);
+	Granman.add_Var(4.9, 5.1 ); //The granulated values are what the network now seeks.
+	Granman.add_Var(7.9, 8.1); //So we use this to filter the values, or granulate the dataset.
+	testerman.set_Range_Goal_Target(0, 0.9, 1.1); //The O2 is considered a 'priority' variable needed increased precision and maintanance.
+	testerman.set_Specific_Goal_Target(0, 1.0); //Set the value for the specific goal we want, used to search the network for optimal solutions.
+	testerman.set_Range_Goal_Target(1, 0.9, 1.1); //The temperature is considered a lower priority and we don't want the heater kicking on and off constantly if the temp is somewhat stable around the goal value.
+	testerman.set_Specific_Goal_Target(1, 1.0);
+
 
 	//Register and name the two feedback states for the current dataset.
 	testerman.register_Feedback_States(2);
 	testerman.rename_Feedback_State(0, "Oxygen_Pump");
 	testerman.rename_Feedback_State(1, "Heater");
 	
+	testerman.setting_Adaptive_Or_Fixed = 0;
 
 	std::string tmp_String = "";
 
 	c_Sim Simboi; //A basic simulation to generate a test dataset.
 
-	for (int cou_Index = 0; cou_Index < 100; cou_Index++)
-	{
-		//olc::NT3::xy(0, 0);
-		//O2, Simboi is just a test simulation to generate data for this development, the actual data from the systems will be read in instead.
-		testerman.Afferent_Goal_State.set_float(0, 0, float(Simboi.O2));
+	/*
+	Simboi.O2 = 0.0;
+	Simboi.Temp = 0.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
 
-		//Temperature
-		testerman.Afferent_Goal_State.set_float(1, 0, float(Simboi.Temp));
+	Simboi.O2 = 15.0;
+	Simboi.Temp = 0.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
 
-		//O2_Pump
-		testerman.Afferent_Feedback_State.set_float(0, 0, float(Simboi.O2_Pump));
+	Simboi.O2 = 0.0;
+	Simboi.Temp = 15.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
 
-		//Heater
-		testerman.Afferent_Feedback_State.set_float(1, 0, float(Simboi.Heater));
+	Simboi.O2 = 15.0;
+	Simboi.Temp = 15.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = -15.0;
+	Simboi.Temp = 15.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = 15.0;
+	Simboi.Temp = -15.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = -15.0;
+	Simboi.Temp = -15.0;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+	*/
+
+	Simboi.O2 = 5;
+	Simboi.Temp = -10;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = -5;
+	Simboi.Temp = 5;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = -5;
+	Simboi.Temp = -5;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = 5;
+	Simboi.Temp = 8;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = 6;
+	Simboi.Temp = 7;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
+
+	Simboi.O2 = 4;
+	Simboi.Temp = 9;
+	Simboi.O2_Pump = 0.0;
+	Simboi.Heater = 0;
+	Simboi_Training(&testerman, &Simboi, &Granman);
 
 
-		testerman.update();
 
-		//Simboi.output();
 
-		Simboi.iterate();
-
-		//std::cout << "\n\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-		//system("PAUSE");
-	}
-	system("CLS");
+	int flg_Train = 0;
 	while (1)
 	{
-		//system("CLS");
-		//olc::NT3::cls(0, 0, 50, 20);
-		olc::NT3::xy(0, 0);
-		
-		//These read the data into the afferent interface. The deltas for the goal states are calculated internally. The Feedback is read into the trace so that it can be retrieved later.
+		while (flg_Train)
+		{
+			//system("CLS");
+			//olc::NT3::cls(0, 0, 50, 20);
+			//olc::NT3::xy(0, 0);
 
-		//O2, Simboi is just a test simulation to generate data for this development, the actual data from the systems will be read in instead.
-		testerman.Afferent_Goal_State.set_float(0, 0, float(Simboi.O2));
+			//These read the data into the afferent interface. The deltas for the goal states are calculated internally. The Feedback is read into the trace so that it can be retrieved later.
 
-		//Temperature
-		testerman.Afferent_Goal_State.set_float(1, 0, float(Simboi.Temp));
+			//O2, Simboi is just a test simulation to generate data for this development, the actual data from the systems will be read in instead.
+			testerman.Afferent_Goal_State.set_float(0, 0, Granman.get_Value(0, Simboi.O2));
 
-		//O2_Pump
-		testerman.Afferent_Feedback_State.set_float(0, 0, float(Simboi.O2_Pump));
+			//Temperature
+			testerman.Afferent_Goal_State.set_float(1, 0, Granman.get_Value(1, Simboi.Temp));
 
-		//Heater
-		testerman.Afferent_Feedback_State.set_float(1, 0, float(Simboi.Heater));
+			//O2_Pump
+			testerman.Afferent_Feedback_State.set_float(0, 0, float(Simboi.O2_Pump));
 
-		Simboi.iterate();
+			//Heater
+			testerman.Afferent_Feedback_State.set_float(1, 0, float(Simboi.Heater));
 
-		testerman.update(1);
-		//testerman.output();
+			testerman.update(1);
 
-		Simboi.output();
-		
-		//system("PAUSE > NULL");
+			testerman.Efferent_Prediction.output_F();
+
+			std::cout << "\n                                                                                                                     ";
+			Simboi.output();
+			std::cout << "\n                                                                                                                     ";
+
+			float tmp_O2_Pump;
+			std::cout << "\n O2_Pump: ";
+			std::cin >> tmp_O2_Pump;
+			std::cout << "\n Heater: ";
+			float tmp_Heater;
+			std::cin >> tmp_Heater;
+
+			if (tmp_O2_Pump == -1) { flg_Train = 0; tmp_O2_Pump = 0.0; }
+
+			Simboi.iterate(tmp_O2_Pump, tmp_Heater);
+			Simboi.output_F("Testboi.txt");
+			//testerman.output();
+
+			//system("PAUSE > NULL");
+		}
+
+		while (!flg_Train)
+		{
+			//system("CLS");
+			//olc::NT3::cls(0, 0, 50, 20);
+			//olc::NT3::xy(0, 0);
+
+			//These read the data into the afferent interface. The deltas for the goal states are calculated internally. The Feedback is read into the trace so that it can be retrieved later.
+
+			//O2, Simboi is just a test simulation to generate data for this development, the actual data from the systems will be read in instead.
+			testerman.Afferent_Goal_State.set_float(0, 0, Granman.get_Value(0, Simboi.O2));
+
+			//Temperature
+			testerman.Afferent_Goal_State.set_float(1, 0, Granman.get_Value(1, Simboi.Temp));
+
+			//O2_Pump
+			testerman.Afferent_Feedback_State.set_float(0, 0, float(Simboi.O2_Pump));
+
+			//Heater
+			testerman.Afferent_Feedback_State.set_float(1, 0, float(Simboi.Heater));
+
+			testerman.update(1);
+
+			Simboi.iterate(testerman.Efferent_Prediction.get_F(0, 0, 0), testerman.Efferent_Prediction.get_F(1, 0, 0));
+
+			if (Simboi.O2 < -5) { flg_Train = 1; }
+			if (Simboi.O2 > 15) { flg_Train = 1; }
+
+			if (Simboi.Temp < -5) { flg_Train = 1; }
+			if (Simboi.Temp > 15) { flg_Train = 1; }
+
+			Simboi.output();
+			Simboi.output_F("Testboi.txt");
+
+			//testerman.output();
+
+			//system("PAUSE > NULL");
+		}
 	}
-
 
 	return 0;
 }

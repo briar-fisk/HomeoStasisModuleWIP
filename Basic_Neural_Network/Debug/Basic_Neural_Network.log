@@ -3,10 +3,23 @@ C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Console.h(284,7
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Console.h(284,59): warning C4244: 'argument': conversion from 'float' to 'short', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Name_Lookup_Tree.h(403,108): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Name_Lookup_Tree.h(404,110): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1505,49): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
-C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1506,73): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1527,49): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_Raw_Table_1D.h(1528,73): warning C4244: 'return': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\c_Math.h(267,21): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(362,94): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(362,55): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(362,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(372,75): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(409,120): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\LoTd\Console_Graphics\Shipyard\c_Shipyard_Line_Graph.h(412,118): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_1D.h(67,16): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
-C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_1D.h(716,33): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_1D.h(718,33): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(384,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(393,80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(393,52): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(419,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(428,79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Node_Network_1D.h(428,51): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(508,54): warning C4244: '=': conversion from '__int64' to 'float', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(561,75): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(562,101): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
@@ -22,7 +35,9 @@ C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(74
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(755,84): warning C4244: 'argument': conversion from 'double' to '__int64', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(788,1): warning C4244: '+=': conversion from 'double' to '__int64', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(835,1): warning C4244: '+=': conversion from 'double' to '__int64', possible loss of data
-C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(908,98): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Buffer.h(909,98): warning C4244: '=': conversion from 'double' to '__int64', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_CAN_1D.h(335,1): warning C4302: '<function-style-cast>': truncation from 'olc::NT3::c_NT3_Base_Node_1D *' to 'char'
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_CAN_1D.h(335,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(325,50): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(365,43): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(406,47): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
@@ -33,4 +48,30 @@ C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1053,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1071,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
 C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\c_NT3_Construct_1D.h(1090,99): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(783,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(783,39): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(786,44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(786,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(840,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(885,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1141,86): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1144,86): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1189,27): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1190,26): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1191,45): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1193,45): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1254,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1260,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1266,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1272,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1278,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1284,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1303,77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1306,77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1331,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1331,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1347,77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1350,77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1360,100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Present\HomeostasisModule\HomeoNetTest\Basic_Neural_Network\Basic_Neural_Network.cpp(1360,54): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   Basic_Neural_Network.vcxproj -> C:\Present\HomeostasisModule\HomeoNetTest\Debug\Basic_Neural_Network.exe

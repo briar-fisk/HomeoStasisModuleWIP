@@ -1693,6 +1693,7 @@ public:
                oint(0, 15, cou_Index);
                std::cout << "]";
                Rows[cou_Index]->output_F();
+               std::cout << "                                                                                                                                                                                         ";
           }
      }
      

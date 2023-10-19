@@ -124,3 +124,9 @@ Wed 09/27/2023  1:52:40.56:
 
 Wed 09/27/2023 12:47:01.10:
    Added the c_Shipyard_Line_Graph from an old project to use for line graph output of the current state of the simulation the homeostasis module is controlling instead of watching twitching tables
+
+Mon 10/02/2023 22:36:04.03:
+   Added class c_Granulator to act as the granulation filter. 
+
+Tue 10/03/2023  3:56:11.73:
+   After much fiddling the granulation filter + rude n crude trace selection + out of bound human intervention (when it goes outside given range the human gets control of the input to manually set things) gives the first stable output run. It's still horrifically innaccurate, but it at least chases the goal atm, a huge step
